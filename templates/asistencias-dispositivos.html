@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block title %} Asistencias-Dispositivos {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/asistencias-dispositivos.css') }}">
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Registrar dispositivos</h2>
+                    </div>
+                </div>
+                <form action="/asistencias/dispositivos" method="POST" id="crear-dispositivo">
+                    <div class="row d-flex justify-content-around mb-3">
+                        <div class="col-12 col-lg-5">
+                            <label for="ip" class="form-label">Dirección IP</label>
+                            <input type="text" class="form-control" id="ip" name="ip" required>
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <label for="puerto" class="form-label">Puerto</label>
+                            <input type="number" class="form-control" min="1" max="65536" id="puerto" name="puerto" required>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-around mb-3">
+                        <div class="col-12 col-lg-5 mb-3">
+                            <label for="habitacion" class="form-label">Habitación</label>
+                            <select class="form-select" required id="habitacion" onchange="mostrarCamasHabitacion()" name="habitacion" aria-label="Habitación">
+                                <option value="" disabled selected>Selecciona una habitación...</option>
+                                {% for habitacion in habitaciones %}
+                                    <option value="{{ habitacion.numero }}">Habitación {{ habitacion.numero }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <label for="cama" class="form-label">Cama</label>
+                            <select class="form-select" required id="cama" name="cama" aria-label="Cama" disabled>
+                                <option value="" disabled selected>Selecciona una cama...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-center mb-5">
+                        <div class="col-12 col-lg-5">
+                            <label for="tipo" class="form-label">Tipo</label>
+                            <select class="form-select" required id="tipo" name="tipo" aria-label="Tipo">
+                                <option value="" disabled selected>Selecciona un tipo...</option>
+                                <option value="rele">Relé</option>
+                                <option value="pulsador">Pulsador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-around">
+                        <div class="col-6 d-flex flex-wrap justify-content-around">
+                            <input type="submit" class="btn btn-success mb-3" value="Registrar" onclick="getData(event)">
+                            <input type="reset" class="btn btn-danger mb-3" onclick="reiniciar()" value="Reiniciar">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Gestionar dispositivos</h2>
+                    </div>
+                </div>
+                <div class="row">
+                            <div class="col-12 col-lg-4 mb-3 d-flex justify-content-center">
+                                <div>
+                                    <button type="button" onclick="actualizarAsistentes()" id="btn-update" class="btn border-0 btn-edit-row">
+                                        <i class="bi bi-pencil-square text-warning fs-1"></i>
+                                    </button>
+                                    <button type="button" onclick="limpiarSeleccion()" id="btn-clear" class="btn border-0 btn-delete-row">
+                                        <i class="bi bi-eraser fs-1"></i>
+                                    </button>
+                                    <button type="button" id="btn-delete" class="btn border-0 btn-delete-row">
+                                        <i class="bi bi-trash text-danger fs-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="modalConfirm" tabindex="-1" aria-labelledby="modalConfirmLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="modalConfirmLabel">Ventana de confirmación</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span class="lead">
+                                                ¿Está seguro de que desea eliminar los dispositivos seleccionados?
+                                            </span>
+                                            <br />
+                                            <span class="lead">
+                                                Esta acción no se puede deshacer.
+                                            </span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-dismiss="modal" onclick="eliminarDispositivos()">Confirmar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal" id="modal-mensajes" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title">Ventana informativa</h5>
+                                        <button type="button" class="btn-close" onclick="cerrarModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="modal-body">
+                                            
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                        <button id="btn-cerrar" type="button" class="btn btn-secondary" onclick="cerrarModal()" data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 d-flex justify-content-center">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <span class="lead">Dispositivos seleccionados: </span>
+                                        <span class="lead fw-bold" id="n-items">0</span>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2 mb-3">
+                                <label for="planta" class="form-label fw-bold">Filtrar por habitación</label>
+                                <select class="form-select" required id="planta" name="planta" onchange="filtrarPlanta()" aria-label="Planta">
+                                    <option value="" selected>Selecciona una habitación...</option>
+                                    {% for habitacion in habitaciones %}
+                                    <option value="{{ habitacion.numero }}">Habitación {{ habitacion.numero }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-lg-2 mb-3">
+                                <div>
+                                    <label for="buscar-asistentes" class="form-label fw-bold">Filtrar por Ip</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Buscar" id="buscar-asistentes"
+                                            aria-label="Search" aria-describedby="search-addon" oninput="buscarAsistentes()">
+                                        <span class="input-group-text">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive" style="max-height: 400px;min-height:400px; overflow-y: auto;">
+                            <table class="table text-center table-hover" id="tabla-asistentes">
+                                <thead class="table-light" style="position:sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Ip</th>
+                                        <th scope="col">Puerto</th>
+                                        <th scope="col">Habitación</th>
+                                        <th scope="col">Cama</th>
+                                        <th scope="col">Fecha registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for dispositivo in dispositivos %}
+                                    <tr id="dispositivo-{{ dispositivo.id }}" class="dispositivo-row" onclick="seleccionarAsistente(event)">
+                                        <td>{{ dispositivo.id }}</td>
+                                        <td>{{ dispositivo.tipo }}</td>
+                                        <td>{{ dispositivo.ip }}</td>
+                                        <td>{{ dispositivo.puerto }}</td>
+                                        <td>{{ dispositivo.habitacion_fk }}</td>
+                                        <td>{{ dispositivo.nombre_cama.upper() }}</td>
+                                        <td>{{ dispositivo.fecha_registro }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/asistencias-dispositvos.js') }}"></script>
+{% endblock %}

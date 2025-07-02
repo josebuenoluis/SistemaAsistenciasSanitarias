@@ -1,0 +1,30 @@
+#input-filters:focus,#input-csv:focus{
+  outline: none;
+  box-shadow: none;
+  border: 1px solid rgb(183, 183, 183);
+}
+
+#input-filters:hover + #filters-button{
+    background-color: rgb(45, 45, 147);
+    transition: 0.4s ease;
+    color: white;
+}
+
+#filters-button:hover{
+    background-color: rgb(45, 45, 147);
+    transition: 0.4s ease;
+    color: white;
+}
+
+#input-csv:hover + #csv-button{
+    background-color: rgb(45, 45, 147);
+    transition: 0.4s ease;
+    color: white;
+}
+
+#csv-button:hover{
+    background-color: rgb(45, 45, 147);
+    transition: 0.4s ease;
+    color: white;
+}
+

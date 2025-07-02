@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Pulsador</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/panelhab.css') }}">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="icon" href="{{ url_for('static', filename='img/logo-icon.png') }}">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+			rel="stylesheet">
+	</head>
+	<body>
+		<div class="controles">
+			<div class="container-botones">
+				<button id="conmutador" onclick="llamada()">Llamada</button>
+				<button id="presencia" onclick="presencia()">Presencia</button>
+			</div>
+		</div>
+		<div class="lampara-container">
+			<img src="{{ url_for('static', filename='img/cuerda.png') }}" id="cuerda" alt="cuerda">
+			
+			<img id="lampara" src="{{ url_for('static', filename='img/pic_bulboff.gif') }}">
+		</div>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/panelhab.js') }}"></script>
+	</body>
+</html>

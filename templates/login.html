@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo-icon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <main>
+        <section>
+            <article>
+                <div class="figure">
+                    <span>Iniciar sesión</span>
+                </div>
+                <img src="{{ url_for('static', filename='img/icon-user.svg') }}" alt="Fondo Web">
+                <form action="/login" method="post">
+                    <input type="text" name="username" class="user" placeholder="Usuario" id="user">
+                    <input type="password" name="password" class="password" placeholder="Contraseña" id="password">
+                    {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <span id="mensaje-login">{{message}}</span>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% endwith %}
+                    <input type="submit">
+                </form>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

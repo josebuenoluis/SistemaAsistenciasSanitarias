@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    ports:
+    - "3308:3306"
+    environment:
+    - MARIADB_ROOT_PASSWORD=alumno
+    - MARIADB_DATABASE=asistencia_sanitaria
+    networks:
+      - asistencias-net
+
+  web:
+    image: josebueno2504/ubuntu-asistencias:app
+    container_name: ubuntu-flask
+    depends_on:
+      - mariadb
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - asistencias-net
+networks:
+  asistencias-net:
+    driver: bridge

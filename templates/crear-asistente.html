@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %} Crear-Asistente {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crear-asistente.css') }}">
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Crear asistente</h2>
+                    </div>
+                </div>
+                <form action="/asistentes/crear" method="post" id="form-crear-asistente">
+                    <div class="row d-flex flex-wrap justify-content-around mb-4">
+                        <div class="col-12 col-lg-4 mb-2">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" required class="form-control">
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <label for="planta" class="form-label">Planta</label>
+                            <select class="form-select" required id="planta" name="planta" aria-label="Planta">
+                                <option value="" disabled selected>Selecciona una planta...</option>
+                                {% for planta in plantas %}
+                                <option value="{{ planta.numero }}">Planta {{ planta.numero }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row d-flex flex-wrap justify-content-around mb-4">
+                        <div class="col-12 col-lg-4 mb-2">
+                            <label for="nif" class="form-label">NIF</label>
+                            <div class="input-group rounded">
+                                <span class="input-group-text" id="nif-icon">
+                                    <i class="bi bi-credit-card-2-front fs-5"></i>
+                                </span>
+                                    <input
+                                    type="text"
+                                    id="nif"
+                                    class="form-control rounded-end"
+                                    name="nif"
+                                    aria-describedby="nif-icon"
+                                    placeholder="DNI/NIE"
+                                    maxlength="9"
+                                    required
+                                    oninput="validarNif()"
+                                    />
+                                    <div class="invalid-feedback">
+                                        El NIF ingresado no es válido.
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-12 col-lg-4">
+                            <label for="codigo" class="form-label">Código</label>
+                            <div class="input-group">
+                                <input type="text" maxlength="6" class="form-control" id="codigo" name="codigo"
+                                    placeholder="Ingrese código de 6 caracteres..." required>
+                                <button type="button" onclick="generarCodigoAsistente()" class="input-group-text" id="generar-codigo">Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-around mb-5">
+                        <div class="col-12 col-lg-4">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="text" name="telefono" id="telefono" maxlength="9" oninput="validarTelefono()" required class="form-control">
+                            <div class="invalid-feedback username">
+                                El teléfono ingresado no es válido.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-around">
+                        <div class="col-4 col-lg-12 flex-wrap d-flex justify-content-center">
+                            <input type="submit" onclick="getData(event)" value="Crear" class="btn btn-success m-4 px-4" id="crear-asistente">
+                            <input type="reset" value="Reiniciar" class="btn btn-danger m-4" id="reiniciar">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal" id="modal-mensajes" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Ventana informativa</h5>
+                          <button type="button" class="btn-close" onclick="cerrarModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modal-body">
+                            
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                          <button id="btn-cerrar" type="button" class="btn btn-secondary" onclick="cerrarModal()" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/crear-asistente.js') }}"></script>
+{% endblock %}

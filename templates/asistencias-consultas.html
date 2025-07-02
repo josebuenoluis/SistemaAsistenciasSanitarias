@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %} Consultas-Asistencias {% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Consultas</h2>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <div class="col-12 col-lg-4 mb-3">
+                        <label for="desde" class="form-label">Desde</label>
+                        <input type="date" onchange="filtroMes()" 
+                        class="form-control"
+                        id="desde"
+                        name="desde"
+                        >
+                    </div>
+                    <div class="col-12 col-lg-4 mb-3">
+                        <label for="hasta" class="form-label">Hasta</label>
+                        <input type="date" onchange="filtroMes()"
+                        class="form-control"
+                        id="hasta"
+                        name="hasta">
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around flex-wrap mb-3">
+                    <div class="col-12 col-lg-10 mb-4 flex-column justify-content-center align-self-center">
+                        <canvas id="myChart" class="w-100 h-75"></canvas>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around flex-wrap mb-3">
+                    <div class="col-12 col-lg-10 mb-4 flex-column justify-content-center align-self-center">
+                        <canvas id="myChart2" class="w-100 h-75"></canvas>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around flex-wrap mb-3">
+                    <div class="col-12 col-lg-8 mb-4 flex-column justify-content-center align-self-center">
+                        <canvas id="myChart3" class="w-100 h-75"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/asistencias-consultas.js') }}"></script>
+{% endblock %}

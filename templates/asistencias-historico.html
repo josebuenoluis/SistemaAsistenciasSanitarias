@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %} Histórico-Asistencias {% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Histórico</h2>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <div class="col-12 col-lg-4 mb-3">
+                        <label for="desde" class="form-label">Desde</label>
+                        <input type="date" onchange="filtroMes()" 
+                        class="form-control"
+                        id="desde"
+                        name="desde"
+                        >
+                    </div>
+                    <div class="col-12 col-lg-4 mb-3">
+                        <label for="hasta" class="form-label">Hasta</label>
+                        <input type="date" onchange="filtroMes()"
+                        class="form-control"
+                        id="hasta"
+                        name="hasta">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="radio" checked name="mesanio" onclick="cambioMes()" id="pormes">
+                            <label class="form-check-label" for="pormes">
+                                Por mes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mesanio" onclick="cambioAnio()" id="poranio">
+                            <label class="form-check-label" for="poranio">
+                                Por año
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around flex-wrap mb-3">
+                    <div class="col-12 col-lg-10 mb-4 flex-column justify-content-center align-self-center">
+                        <canvas id="myChart" class="w-100 h-75"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ url_for('static', filename='js/asistencias-historico.js') }}"></script>
+{% endblock %}

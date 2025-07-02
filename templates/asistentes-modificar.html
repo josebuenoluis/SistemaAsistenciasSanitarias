@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %} Modificar-Asistente {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/asistentes-modificar.css') }}">
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="row d-flex justify-content-center mb-4 my-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center mb-3">
+                            <div class="col-10 col-lg-6 mb-3">
+                                <h2 class="text-center border-bottom">Modificar asistentes</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-3 d-flex justify-content-center">
+                                <div>
+                                    <button type="button" onclick="actualizarAsistentes()" id="btn-update" class="btn border-0 btn-edit-row">
+                                        <i class="bi bi-pencil-square text-warning fs-1"></i>
+                                    </button>
+                                    <button type="button" onclick="limpiarSeleccion()" id="btn-clear" class="btn border-0 btn-delete-row">
+                                        <i class="bi bi-eraser fs-1"></i>
+                                    </button>
+                                    <button type="button" id="btn-delete" class="btn border-0 btn-delete-row">
+                                        <i class="bi bi-trash text-danger fs-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 mb-3 d-flex justify-content-center">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <span class="lead">Asistentes seleccionados: </span>
+                                        <span class="lead fw-bold" id="n-items">0</span>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2 mb-3">
+                                <label for="planta" class="form-label fw-bold">Filtrar por planta</label>
+                                <select class="form-select" required id="planta" name="planta" onchange="filtrarPlanta()" aria-label="Planta">
+                                    <option value="" selected>Selecciona una planta...</option>
+                                    {% for planta in plantas %}
+                                    <option value="{{ planta.numero }}">Planta {{ planta.numero }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-lg-2 mb-3">
+                                <div>
+                                    <label for="buscar-asistentes" class="form-label fw-bold">Filtrar por nombre</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Buscar" id="buscar-asistentes"
+                                            aria-label="Search" aria-describedby="search-addon" oninput="buscarAsistentes()">
+                                        <span class="input-group-text">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modalConfirm" tabindex="-1" aria-labelledby="modalConfirmLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="modalConfirmLabel">Ventana de confirmación</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="lead">
+                                            ¿Está seguro de que desea eliminar a los asistentes seleccionados?
+                                        </span>
+                                        <br />
+                                        <span class="lead">
+                                            Esta acción no se puede deshacer.
+                                        </span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger"
+                                            data-bs-dismiss="modal" onclick="eliminarAsistentes()">Confirmar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="table-responsive" style="max-height: 400px;min-height:400px; overflow-y: auto;">
+                                    <table class="table text-center table-hover" id="tabla-asistentes">
+                                        <thead class="table-light" style="position:sticky; top: 0;">
+                                            <tr>
+                                                <th scope="col">NIF</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Teléfono</th>
+                                                <th scope="col">Código</th>
+                                                <th scope="col">NºPlanta</th>
+                                                <th scope="col">Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for asistente in asistentes %}
+                                            <tr id="asistente-{{ asistente.dni }}" class="asistente-row" onclick="seleccionarAsistente(event)">
+                                                <td>{{ asistente.dni }}</td>
+                                                <td>{{ asistente.nombre }}</td>
+                                                <td>{{ asistente.telefono }}</td>
+                                                <td>{{ asistente.codigo }}</td>
+                                                <td>Planta {{ asistente.planta_fk }}</td>
+                                                {% if asistente.activo %}
+                                                    <td>Activo</td>
+                                                {% else %}
+                                                    <td>Inactivo</td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/asistentes-modificar.js') }}"></script>
+{% endblock %}

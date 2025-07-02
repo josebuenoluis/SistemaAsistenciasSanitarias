@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %} Exportar-Datos {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exportar-datos.css') }}">
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="col-12 col-lg-8">
+                        <h2 class="text-center border-bottom">Exportar datos</h2>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around flex-wrap">
+                    <div class="col-10 col-sm-5 col-lg-3 mb-4">
+                        <div class="input-group" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <input type="text" readonly class="form-control" id="input-filters"
+                                placeholder="Aplicar filtros..." style="cursor: pointer;">
+                            <button type="button" class="input-group-text" id="filters-button">
+                                <i class="bi bi-funnel-fill fs-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-10 col-sm-5 col-lg-3 mb-4">
+                        <div class="input-group" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                            <input type="text" readonly class="form-control" id="input-csv"
+                                placeholder="Exportar CSV" style="cursor: pointer;">
+                            <button type="button" class="input-group-text" id="csv-button">
+                                <i class="bi bi-download fs-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <div class="col-12">
+                        <div class="table-responsive border border-1" style="max-height: 400px;min-height:400px; overflow-y: auto;">
+                            <table class="table text-center table-hover" id="tabla-asistencias">
+                                <thead class="table-light" style="position:sticky; top: 0;">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">NIF</th>
+                                        <th scope="col">Habitación</th>
+                                        <th scope="col">Cama</th>
+                                        <th scope="col">Fecha llamada</th>
+                                        <th scope="col">Fecha presencia</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for asistencia in asistencias %}
+                                        <tr>
+                                            <td>{{asistencia.id}}</td>
+                                            {% if asistencia.asistente_fk != None %}
+                                                <td>{{asistencia.asistente_fk}}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                            <td>{{asistencia.habitacion_fk}}</td>
+                                            <td>{{asistencia.cama_fk}}</td>
+                                            <td>{{asistencia.fecha_llamada}}</td>
+                                            {% if asistencia.fecha_presencia != None %}
+                                                <td>{{asistencia.fecha_presencia}}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                            <td>{{asistencia.estado.capitalize()}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Filtros</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#">
+                                    <div class="row d-flex justify-content-center flex-column">
+                                        <div class="row mb-3 d-flex justify-content-between">
+                                            <div class="col">
+                                                <label for="desde" class="form-label">Desde</label>
+                                                <input id="desde" type="date" class="form-control">
+                                            </div>
+                                            <div class="col">
+                                                <label for="hasta" class="form-label">Hasta</label>
+                                                <input id="hasta" type="date" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-between">
+                                            <div class="col">
+                                                <label for="habitacion" class="form-label">NºHabitación</label>
+                                                <input id="habitacion" type="number" min="1" placeholder="Habitación" class="form-control text-center">
+                                            </div>
+                                            <div class="col">
+                                                <label for="asistente" class="form-label">Nif</label>
+                                                <input id="asistente" type="text" placeholder="DNI/NIE" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="planta" class="form-label">Planta</label>
+                                            <select class="form-select" required id="planta" name="planta" aria-label="Planta">
+                                                <option value="" selected>Selecciona una planta...</option>
+                                                {% for planta in plantas %}
+                                                <option value="{{ planta.numero }}">Planta {{ planta.numero }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <input type="reset" value="Limpiar filtros" class="btn btn-danger">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="obtenerFiltros()">Aplicar filtros</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel2">Filtros</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row d-flex justify-content-center flex-column">
+                                    <form action="#" id="datos-exportar">
+                                        <div class="row d-flex justify-content-center flex-column">
+                                            <div class="row d-flex justify-content-between mb-3">
+                                                <div class="col">
+                                                    <label for="nombre-archivo" class="forml-label">Nombre</label>
+                                                    <input type="text" id="nombre-archivo" placeholder="Nombre del archivo" class="form-control">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="delimitador" class="forml-label">Delimitador</label>
+                                                    <input type="text" id="delimitador" placeholder="Ingrese delimitador CSV" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="correo" class="forml-label">Correo electrónico</label>
+                                                <input type="text" id="correo" placeholder="Opcional" class="form-control">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" onclick="obtenerAsistencias()">Exportar CSV</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/exportar-datos.js') }}"></script>
+{% endblock %}

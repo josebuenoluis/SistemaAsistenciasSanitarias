@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not found 404</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='css/notfound.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo-icon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    <main>
+        <section>
+            <article>
+                <div class="animate-error">
+                    <img src="{{ url_for('static', filename='img/lupa.png') }}" alt="">
+                    <h1>404</h1>
+                </div>
+                <div class="text-error">
+                    <h2>Página no encontrada</h2>
+                    <p>Lo sentimos, la página que buscas no existe o ha sido movida.</p>
+                    <a href="/">Volver al inicio</a>
+                </div>
+            </article>
+        </section>
+    </main>
+    
+</body>
+</html>

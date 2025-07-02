@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrolamiento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/asistencias-enroll.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo-icon.png') }}">
+</head>
+<body>
+    <main>
+        <section>
+            <article>
+                <div class="figure">
+                    <span>Enrolamiento</span>
+                </div>
+                <img src="{{ url_for('static', filename='img/icon-user.svg') }}" alt="Fondo Web">
+                <form action="/enroll" method="post">
+                    <input type="text" name="username" class="user" placeholder="Usuario" id="user">
+                    <input type="password" name="codigo" class="codigo" placeholder="Código asistente" id="codigo">
+                    {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <span id="mensaje-login">{{message}}</span>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% endwith %}
+                    <input type="submit">
+                </form>
+            </article>
+        </section>
+    </main>
+
+</body>
+</html>
